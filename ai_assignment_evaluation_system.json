@@ -1,0 +1,78 @@
+{
+    "title": "AI-Driven Assignment Evaluation and Scoring System",
+    "objective": "Automate evaluation of student assignments using LLMs to reduce manual effort and improve consistency.",
+    "problem_statement": "Build a system that processes ZIP files containing PDFs of student assignments, extracts questions and answers, evaluates them using an LLM, and generates structured score reports.",
+    "workflow": [
+        "Upload ZIP containing multiple student assignments",
+        "Extract ZIP contents",
+        "Detect all PDFs (including nested folders)",
+        "Extract text from PDFs",
+        "Split text into Question and Answer pairs",
+        "Send each Q&A pair to LLM for evaluation",
+        "Receive marks (0-10) and feedback",
+        "Aggregate marks per assignment",
+        "Generate final JSON report"
+    ],
+    "input": {
+        "format": "ZIP",
+        "contents": "Multiple PDFs with Python questions and answers"
+    },
+    "processing_steps": {
+        "pdf_extraction": "Use libraries like PyMuPDF or pdfplumber",
+        "text_splitting": "Regex or NLP-based splitting",
+        "llm_evaluation": {
+            "criteria": [
+                "Correctness",
+                "Code quality",
+                "Completeness",
+                "Efficiency"
+            ],
+            "marks_per_question": 10
+        }
+    },
+    "output_format": {
+        "student_name": "<Student Name>",
+        "module": "<Module Name>",
+        "questions": [
+            {
+                "question": "<question text>",
+                "answer": "<student answer>",
+                "score": "8/10",
+                "feedback": "<feedback text>"
+            }
+        ],
+        "total_score": "76/100",
+        "overall_feedback": "<summary feedback>"
+    },
+    "expected_output_example": {
+        "student_name": "John Doe",
+        "module": "Python Basics",
+        "questions": [
+            {
+                "question": "Explain list comprehension.",
+                "answer": "List comprehension is used to create lists in a concise way...",
+                "score": "8/10",
+                "feedback": "Good explanation but missing examples."
+            },
+            {
+                "question": "Write a function to reverse a string.",
+                "answer": "def reverse(s): return s[::-1]",
+                "score": "10/10",
+                "feedback": "Perfect answer."
+            }
+        ],
+        "total_score": "18/20",
+        "overall_feedback": "Strong understanding with minor gaps."
+    },
+    "deliverables": [
+        "Working code or n8n workflow",
+        "LLM prompt design",
+        "JSON output reports",
+        "Documentation"
+    ],
+    "bonus": [
+        "Add plagiarism detection",
+        "Support multiple programming languages",
+        "Dashboard for analytics"
+    ]
+}
