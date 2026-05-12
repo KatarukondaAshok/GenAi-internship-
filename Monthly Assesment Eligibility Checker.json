@@ -1,0 +1,459 @@
+{
+  "name": "Monthly Assesment Eligibility Checker",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": " Monthly Assessment Marks",
+        "formDescription": "Monthly Assesment Form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Enter Name",
+              "placeholder": "Enter Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Select Course",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Data Science"
+                  },
+                  {
+                    "option": "Data Analysis"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -1104,
+        256
+      ],
+      "id": "3065fe96-19ff-4469-86f9-1302f6d111fd",
+      "name": "Monthly Assesment Form",
+      "webhookId": "a4ff7150-c957-444f-b3f3-3ff864fd0c70"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eb4ef952-6e8f-4640-b4db-ea57e6095c03",
+              "leftValue": "={{ $json['Select Course'] }}",
+              "rightValue": "Data Science",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        192
+      ],
+      "id": "3f3a2f4c-6816-4c33-a17b-63147301c559",
+      "name": "Course Selection"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "placeholder": "={{ $('Monthly Assesment Form').item.json['Enter Name'] }}",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Machine Learning (ML)",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Artificial Intelligence (AI)",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Convolutional Neural Networks (CNN)",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Natural Language Processing (NLP)",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Generative AI (GenAI)",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        -640,
+        16
+      ],
+      "id": "3873a047-ad14-4dae-8c15-e2b1c1732c2a",
+      "name": "Data Science",
+      "webhookId": "3bfd5d52-f800-48df-96cf-0391d13710b9"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Python",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "EDA",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "SQL",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Power BI",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Advanced Statistics",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        -640,
+        352
+      ],
+      "id": "9477ee55-b28e-430d-bb57-ab1b4d8dee02",
+      "name": "Data Analysis",
+      "webhookId": "3bfd5d52-f800-48df-96cf-0391d13710b9"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "item = _items[0]\naverage = (\n    item[\"json\"][\"Machine Learning (ML)\"] +\n    item[\"json\"][\"Artificial Intelligence (AI)\"] +\n    item[\"json\"][\"Convolutional Neural Networks (CNN)\"] +\n    item[\"json\"][\"Natural Language Processing (NLP)\"] +\n    item[\"json\"][\"Generative AI (GenAI)\"]\n) / 5\n\nreturn [{\n    \"json\": {\n        \"Name\": \"Monthly Assessment Form\",\n        \"Candidate Name\": item[\"json\"][\"Name\"],\n        \"Average Marks Scored\": average\n    }\n}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        0
+      ],
+      "id": "c96b0498-9127-4244-8a55-363adb2f12a1",
+      "name": "DS Average Marks"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "item = _items[0]\naverage = (\n    item[\"json\"][\"Python\"] +\n    item[\"json\"][\"EDA\"] +\n    item[\"json\"][\"SQL\"] +\n    item[\"json\"][\"Power BI\"] +\n    item[\"json\"][\"Advanced Statistics\"]\n) / 5\n\nreturn [{\n    \"json\": {\n        \"Name\": \"Monthly Assessment Form\",\n        \"Candidate Name\": item[\"json\"][\"Name\"],\n        \"Average Marks Scored\": average\n    }\n}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        352
+      ],
+      "id": "90f46cca-74e8-4da3-9d14-b89a0dee0f98",
+      "name": "DA Average Marks"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e6c76e48-ed35-4ab8-9231-13635dfd12e6",
+              "leftValue": "={{ $json['Average Marks Scored'] }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -304,
+        -48
+      ],
+      "id": "3687f1ec-cbc7-4eb2-9af1-3b1ab7ab02bd",
+      "name": "Eligibility Check",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e6c76e48-ed35-4ab8-9231-13635dfd12e6",
+              "leftValue": "={{ $json['Average Marks Scored'] }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        352
+      ],
+      "id": "f1738e49-467a-4620-8621-3ea19ae1cfe6",
+      "name": "Eligibility Check1"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Eligible",
+        "completionMessage": "=Your score is \n{{ $('DS Average Marks').item.json['Average Marks Scored'] }},so you are eligible for placements.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        -112
+      ],
+      "id": "b1b66337-295b-4000-a2a9-c0afa174308e",
+      "name": "DS Eligible",
+      "webhookId": "29d76936-59b1-413e-9d4c-0d1e0eba1423"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Not Eligible",
+        "completionMessage": "=Your score is {{ $('DS Average Marks').item.json['Average Marks Scored'] }}, so you are not eligible for placements. You also need to improve your performance in the modules. ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        48
+      ],
+      "id": "faee3ab1-2b19-412b-b6f5-5f0acf78b692",
+      "name": "DS Not Eligible",
+      "webhookId": "29d76936-59b1-413e-9d4c-0d1e0eba1423"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Eligible",
+        "completionMessage": "=Your score is {{ $('DA Average Marks').item.json['Average Marks Scored'] }} , so you are eligible for placements.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        256
+      ],
+      "id": "63c9aaf4-ed0f-4d6e-82c1-a83d8afe17eb",
+      "name": "DA Eligible",
+      "webhookId": "29d76936-59b1-413e-9d4c-0d1e0eba1423"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Not Eligible",
+        "completionMessage": "=Your score is {{ $('DA Average Marks').item.json['Average Marks Scored'] }}, so you are not eligible for placements. You also need to improve your performance in the modules.",
+        "limitWaitTime": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        448
+      ],
+      "id": "02e296d5-edfb-453d-a737-9ea2478e5fe6",
+      "name": "DA Not Eligible",
+      "webhookId": "29d76936-59b1-413e-9d4c-0d1e0eba1423"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Monthly Assesment Form": {
+      "main": [
+        [
+          {
+            "node": "Course Selection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Course Selection": {
+      "main": [
+        [
+          {
+            "node": "Data Science",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Data Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Science": {
+      "main": [
+        [
+          {
+            "node": "DS Average Marks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Analysis": {
+      "main": [
+        [
+          {
+            "node": "DA Average Marks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DS Average Marks": {
+      "main": [
+        [
+          {
+            "node": "Eligibility Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DA Average Marks": {
+      "main": [
+        [
+          {
+            "node": "Eligibility Check1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eligibility Check": {
+      "main": [
+        [
+          {
+            "node": "DS Eligible",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DS Not Eligible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eligibility Check1": {
+      "main": [
+        [
+          {
+            "node": "DA Eligible",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DA Not Eligible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c76d194e-5aea-4947-ad93-2f2d52abc7b0",
+  "meta": {
+    "instanceId": "ea9456679ea708b156199abd404235ac7bddca61cb7abf2c4612672d9eac3a60"
+  },
+  "id": "W71UgJgdD7Gp5Hgk",
+  "tags": []
+}
