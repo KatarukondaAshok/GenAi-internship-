@@ -1,0 +1,669 @@
+{
+  "name": "Smart Query Routing",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "17QzuOsPvOaQgCaRA93kkvul57pRa5FfgyzrMd9So9Qs",
+          "mode": "list",
+          "cachedResultName": "Query Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17QzuOsPvOaQgCaRA93kkvul57pRa5FfgyzrMd9So9Qs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 735733398,
+          "mode": "list",
+          "cachedResultName": "Form responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17QzuOsPvOaQgCaRA93kkvul57pRa5FfgyzrMd9So9Qs/edit#gid=735733398"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        224
+      ],
+      "id": "b521b58a-33d7-4dc5-8192-22244a4ee1d6",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "dnquQYmpNWN9TBmW",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.Query }}",
+        "options": {
+          "categories": "Urgent, Normal"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+      "typeVersion": 1.1,
+      "position": [
+        -800,
+        224
+      ],
+      "id": "2243b952-5b49-4ecc-af67-1d0ea722c6a3",
+      "name": "Sentiment Analysis"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        560
+      ],
+      "id": "317a8b4e-a862-4c28-b1a4-17a58757e209",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "content": "## Based on Google Form it will get triggered. [Form Link](https://forms.gle/vziQuj6omDfQ6si77)"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1312,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "6ad4bb20-254b-410f-8c18-51b210a0a8e2",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Based on the value of {{ $json.Query }},identify the matching category from the list below. Then return only the assigned department corresponding to that category.\n\nCategories and Departments:\n\nWiFi Issue → IT Support\n\nPlacement → Placement Cell\n\nCertification → Admin Department\n\nBatch Change → Academic Coordinator\n\nTechnical Doubt → Trainer / Mentor\n\nLMS Access → LMS Technical Support\n\nPayment Issue → Accounts Department\n\nAssignments / Tasks → Training Department",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -432,
+        224
+      ],
+      "id": "1c7977b8-b895-40e5-b00c-fc981534c2f6",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        544
+      ],
+      "id": "c138d5e2-c487-4417-865d-940ef6a1100a",
+      "name": "Google Gemini Chat Model1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "LMS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "b311f89a-c82c-4291-b80b-e17dc1620581"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "LMS Technical Support"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "982150a0-9a6d-4af2-8abc-01df22c976c1",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Training",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Training Department"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1e2a6927-280e-4b32-adf4-4eb1e81fae7b",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Accounts",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Accounts Department"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b5d784aa-afd6-46fb-82da-8accfe1651fe",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "IT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IT Department"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0c0b1a37-be87-4826-b698-9783b6f1e4fb",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Placement",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Placement Department"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0c3c2365-e10a-4280-8b0a-fc2dd3edf3ca",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Academic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Academic Coordinator"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a462d3be-cc33-4e9c-a0ff-d1da9d1afb11",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Admin",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "=Admin Department"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4a964908-d9d5-461b-afca-a8d442b8e528",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Trainer ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Trainer/Mentor"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -96,
+        208
+      ],
+      "id": "7aedabc0-1505-4e2d-9f0c-31664f8ef500",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "sendTo": "=shubham.crusader@gmail.com",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        304,
+        -112
+      ],
+      "id": "8a54b92e-508c-4e91-9c91-2a52ba036390",
+      "name": "LMS",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=training@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        32
+      ],
+      "id": "4c4560e9-3424-423d-98a6-cfb66aefeb3e",
+      "name": "Training",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=accounts@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        352,
+        176
+      ],
+      "id": "8f0f9f99-5671-4c66-9ec1-7930b116b610",
+      "name": "Accounts",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "shubham.crusader@gmail.com",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        272
+      ],
+      "id": "00fe3912-9497-45eb-b752-59bae16db8a7",
+      "name": "IT",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=placement@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        352
+      ],
+      "id": "5abb3a0a-c55e-4fd4-ad2c-e0ce6fad0bb4",
+      "name": "Placement",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=academic@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        464
+      ],
+      "id": "f39361c4-76cb-485d-a78d-0bc2c5105e1e",
+      "name": "Academic",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=admin@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        544
+      ],
+      "id": "c2e51d53-8ddd-4a9a-b974-54491ea337c4",
+      "name": "Admin",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=trainer@innomatics.in",
+        "subject": "=Urgent Query -  {{ $('Basic LLM Chain').item.json.text }}({{ $('Sentiment Analysis').item.json.Branch }})",
+        "emailType": "text",
+        "message": "=Dear Sir,\n\nA new student query has been received.\n\n\n🧍 Name: {{ $('Google Sheets Trigger').item.json.Name }}  \n🆔 Enrollment ID: {{ $('Google Sheets Trigger').item.json['Enrollment ID'] }}  \n🏫 Branch: {{ $('Google Sheets Trigger').item.json.Branch }}  \n📊 Sentiment: {{ $('Sentiment Analysis').item.json.sentimentAnalysis.category }}  \n📝 Query: \"{{ $('Sentiment Analysis').item.json.Query }}\"\n\n\nPlease look into this issue at the earliest.\n\n\nThank You,  \n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        720
+      ],
+      "id": "52a77f65-6cbb-4167-8f35-df72419b7d5f",
+      "name": "Technical Doubts",
+      "webhookId": "3698d4ba-ad53-4d68-9699-77074144dab5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vReXzJ0FJFmfqEZf",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "LMS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Training",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Placement",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Academic",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Technical Doubts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "96e4c66d-9c21-42a5-b840-9f3aa67e0f6f",
+  "meta": {
+    "instanceId": "ea9456679ea708b156199abd404235ac7bddca61cb7abf2c4612672d9eac3a60"
+  },
+  "id": "t9V75PvMCHowrjNv",
+  "tags": []
+}
