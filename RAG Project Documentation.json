@@ -1,0 +1,84 @@
+# Create JSON assignment for RAG Project Documentation
+
+import json
+
+assignment7 = {
+    "title": "RAG (Retrieval-Augmented Generation) Project Documentation",
+    "subtitle": "Student-Driven Domain-Based RAG Application",
+    "objective": "Design and develop a real-world RAG-based AI application using a chosen domain, open-source data, and LLM integration.",
+    "workflow_steps": [
+        {
+            "step": "Domain Selection",
+            "description": "Choose a domain such as Healthcare, Education, Finance, Legal, etc.",
+            "deliverable": "Finalized Domain Name"
+        },
+        {
+            "step": "Problem Statement Collection",
+            "description": "Define 2–3 real-time RAG-based problems that are information-heavy and suitable for QA systems.",
+            "deliverable": "2–3 Problem Statements"
+        },
+        {
+            "step": "Final Project Title",
+            "description": "Select one final title including domain and purpose.",
+            "deliverable": "Final Project Title"
+        },
+        {
+            "step": "Data Collection",
+            "description": "Collect open-source or synthetic data (PDF, CSV, TXT, DOCX, JSON, Web).",
+            "deliverable": "Dataset Links + Sample Files"
+        },
+        {
+            "step": "RAG Architecture",
+            "description": "Implement pipeline: Loader → Splitter → Embedding → Vector DB → Retriever → LLM → Response",
+            "deliverable": "RAG Flow Diagram + Explanation"
+        },
+        {
+            "step": "Tech Stack",
+            "description": "Define technologies used.",
+            "deliverable": "Tech Stack List"
+        },
+        {
+            "step": "User Interface",
+            "description": "Optional UI using Streamlit or API.",
+            "deliverable": "Screenshots or Deployment Link"
+        }
+    ],
+    "components": {
+        "document_loader": "Load PDFs, CSVs, Text",
+        "text_splitter": "Chunk text",
+        "embedding_model": "OpenAI / HuggingFace",
+        "vector_database": "FAISS / Chroma",
+        "retriever": "Similarity search",
+        "llm": "GPT / Gemini / Llama",
+        "prompt_template": "Context injection",
+        "response_generator": "Final output"
+    },
+    "tech_stack_example": [
+        "Python",
+        "LangChain",
+        "FAISS / Chroma",
+        "OpenAI / Gemini / HuggingFace",
+        "Streamlit / FastAPI",
+        "Pandas / NumPy"
+    ],
+    "deadlines": {
+        "problem_review": "24-02-2026",
+        "final_submission": "28-02-2026"
+    },
+    "deliverables_summary": [
+        "Domain Name",
+        "Problem Statements",
+        "Project Title",
+        "Dataset",
+        "RAG Architecture",
+        "Tech Stack",
+        "UI (optional)"
+    ]
+}
+
+file_path = "/mnt/data/rag_project_documentation.json"
+
+with open(file_path, "w") as f:
+    json.dump(assignment7, f, indent=4)
+
+file_path
