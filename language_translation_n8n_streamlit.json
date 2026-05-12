@@ -1,0 +1,59 @@
+{
+    "title": "Language Translation System using n8n and Streamlit",
+    "objective": "Build a system that translates text between multiple languages using n8n workflows and a Streamlit UI.",
+    "problem_statement": "Users need a simple interface to translate text across languages. The system should accept input text, detect or select source/target languages, process via an LLM or translation API, and display results.",
+    "requirements": {
+        "tools": [
+            "n8n",
+            "Streamlit",
+            "OpenAI API or Translation API"
+        ],
+        "skills": [
+            "API integration",
+            "workflow automation",
+            "Python basics",
+            "UI development"
+        ]
+    },
+    "workflow": [
+        "User inputs text in Streamlit UI",
+        "Select source and target language",
+        "Send request to n8n webhook",
+        "Process translation using LLM/API",
+        "Return translated text",
+        "Display result in UI"
+    ],
+    "features": [
+        "Multi-language support",
+        "Auto language detection",
+        "Real-time translation",
+        "History of translations"
+    ],
+    "input": {
+        "text": "<input text>",
+        "source_language": "<optional>",
+        "target_language": "<required>"
+    },
+    "output": {
+        "translated_text": "<translated text>",
+        "detected_language": "<detected language>"
+    },
+    "deliverables": [
+        "Streamlit app code",
+        "n8n workflow JSON",
+        "API integration",
+        "Documentation"
+    ],
+    "bonus": [
+        "Voice input and output",
+        "File translation (PDF, TXT)",
+        "Deploy on cloud"
+    ],
+    "evaluation_criteria": [
+        "Accuracy of translation",
+        "UI usability",
+        "Workflow efficiency",
+        "Code quality",
+        "Innovation"
+    ]
+}
