@@ -1,0 +1,67 @@
+{
+    "title": "PPT Generation System using n8n and Streamlit",
+    "objective": "Build an automated system to generate PowerPoint presentations from user input using n8n workflows and a Streamlit interface.",
+    "problem_statement": "Users need a quick way to generate structured presentations. The system should accept a topic, generate slide content using an LLM, and produce a downloadable PPT file.",
+    "requirements": {
+        "tools": [
+            "n8n",
+            "Streamlit",
+            "OpenAI API",
+            "python-pptx"
+        ],
+        "skills": [
+            "API integration",
+            "automation workflows",
+            "Python",
+            "UI development"
+        ]
+    },
+    "workflow": [
+        "User enters topic in Streamlit UI",
+        "Send request to n8n webhook",
+        "Use LLM to generate slide outline",
+        "Generate slide content (title + bullets)",
+        "Create PPT using python-pptx",
+        "Return downloadable PPT file",
+        "Display preview in UI"
+    ],
+    "features": [
+        "Auto slide generation",
+        "Custom number of slides",
+        "Theme selection",
+        "Download PPT file"
+    ],
+    "input": {
+        "topic": "<presentation topic>",
+        "num_slides": "<optional>",
+        "style": "<formal/informal>"
+    },
+    "output": {
+        "ppt_file": "<downloadable file>",
+        "slides": [
+            {
+                "title": "<slide title>",
+                "content": "<bullet points>"
+            }
+        ]
+    },
+    "deliverables": [
+        "Streamlit app code",
+        "n8n workflow JSON",
+        "PPT generation script",
+        "Documentation"
+    ],
+    "bonus": [
+        "Add images to slides",
+        "Voice narration",
+        "Export to PDF",
+        "Deploy online"
+    ],
+    "evaluation_criteria": [
+        "Content quality",
+        "Automation efficiency",
+        "UI experience",
+        "Code structure",
+        "Creativity"
+    ]
+}
