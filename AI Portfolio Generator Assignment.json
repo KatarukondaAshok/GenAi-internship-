@@ -1,0 +1,72 @@
+# Create JSON assignment for AI-Generated Portfolio Website from Resume
+
+import json
+
+assignment6 = {
+    "title": "AI-Generated Portfolio Website from Resume",
+    "objective": "Automatically generate a personal portfolio website from a user's resume using AI and automation tools.",
+    "problem_statement": "Users often struggle to create portfolio websites. This system should accept a resume, extract structured information, and generate a ready-to-use portfolio website.",
+    "workflow": [
+        "Upload resume (PDF/DOCX)",
+        "Extract text from resume",
+        "Parse structured data (name, skills, projects, experience)",
+        "Send data to LLM",
+        "Generate portfolio website code (HTML/CSS/JS or Streamlit)",
+        "Preview generated website",
+        "Download website files"
+    ],
+    "technologies": {
+        "frontend": ["Streamlit / React (optional)"],
+        "backend": ["n8n"],
+        "ai": ["OpenAI / Gemini / Mistral"],
+        "parsing": ["PyMuPDF", "python-docx"]
+    },
+    "features": [
+        "Auto resume parsing",
+        "Portfolio generation",
+        "Editable sections",
+        "Downloadable website",
+        "Live preview"
+    ],
+    "input": {
+        "resume_file": "<PDF/DOCX>",
+        "theme": "<optional>",
+        "style": "<modern/minimal>"
+    },
+    "output": {
+        "portfolio_code": "HTML/CSS/JS or Streamlit app",
+        "sections": [
+            "About Me",
+            "Skills",
+            "Projects",
+            "Experience",
+            "Contact"
+        ]
+    },
+    "deliverables": [
+        "Resume parser code",
+        "n8n workflow JSON",
+        "Generated portfolio code",
+        "Documentation"
+    ],
+    "bonus": [
+        "Deploy portfolio online",
+        "Add animations",
+        "Custom themes",
+        "AI-generated project descriptions"
+    ],
+    "evaluation_criteria": [
+        "Accuracy of data extraction",
+        "Quality of generated portfolio",
+        "UI/UX design",
+        "Automation efficiency",
+        "Innovation"
+    ]
+}
+
+file_path = "/mnt/data/ai_portfolio_generator.json"
+
+with open(file_path, "w") as f:
+    json.dump(assignment6, f, indent=4)
+
+file_path
