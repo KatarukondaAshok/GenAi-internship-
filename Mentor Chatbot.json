@@ -1,0 +1,158 @@
+{
+  "name": "Mentor Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "cce9ce27-6276-4eb9-ac7c-d5199f8d0fa1",
+      "name": "Telegram Trigger",
+      "webhookId": "684657a6-5aa3-40cd-8c63-188528c9bf5f",
+      "credentials": {
+        "telegramApi": {
+          "id": "6tvm8IxBkftpWcFM",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are a friendly and supportive educational assistant helping students with Python, Data Analysis, Machine Learning, and Deep Learning.\n\nBehavior Rules:\n\n**First Message Detection:**\n- Check the conversation history\n- If this is the first interaction (no previous messages), greet the user warmly with a positive, engaging message\n- Then ask: \"What doubts are you having in the given modules (Python, Data Analysis, Machine Learning, Deep Learning)?\"\n\n**Subsequent Messages:**\n- Do NOT greet again\n- Reply directly to the user's question or doubt\n- Provide clear, elaborate explanations with examples\n- After answering, always end with: \"What doubts are you having in the given modules (Python, Data Analysis, Machine Learning, Deep Learning)?\"\n\n**Tone:**\n- Always be friendly, supportive, and clear\n- Provide elaborate explanations with practical examples\n- Encourage the user to continue asking questions\n- Assume the user is familiar with programming basics"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        -64
+      ],
+      "id": "9ee77f4c-332c-45a1-915f-38865928b8d6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        592,
+        160
+      ],
+      "id": "faf19e5c-bc17-49ff-bfea-a24421d547ee",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cQ5JztDZMz2QHJMa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        -64
+      ],
+      "id": "615b78f1-44b6-46ec-ada7-e04d562c36ee",
+      "name": "Send a text message",
+      "webhookId": "993211a5-975c-4d0a-9c59-9a92d2a16391",
+      "credentials": {
+        "telegramApi": {
+          "id": "6tvm8IxBkftpWcFM",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        160
+      ],
+      "id": "16d92dda-5367-49a4-9d48-734ca15e9f6e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "439b6915-8f06-4521-b3ed-68ae31ce3332",
+  "meta": {
+    "instanceId": "ea9456679ea708b156199abd404235ac7bddca61cb7abf2c4612672d9eac3a60"
+  },
+  "id": "FFXvYGkWgnWz1Xgp",
+  "tags": []
+}
