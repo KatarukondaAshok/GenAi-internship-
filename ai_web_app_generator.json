@@ -1,0 +1,78 @@
+{
+    "title": "AI-Powered Web App/Game Generator Using Streamlit and n8n",
+    "project_overview": "Generate simple apps or games from text prompts using Streamlit UI, n8n workflows, and LLMs.",
+    "objective": "Enable users to create and run applications automatically using AI-generated Streamlit code.",
+    "architecture": {
+        "flow": [
+            "User enters app/game description",
+            "Streamlit sends prompt to n8n webhook",
+            "n8n processes prompt via LLM",
+            "LLM generates Streamlit Python code",
+            "n8n returns code",
+            "Streamlit stores and executes code",
+            "Generated app runs in Streamlit"
+        ]
+    },
+    "technologies": {
+        "frontend": ["Streamlit"],
+        "backend": ["n8n"],
+        "ai": ["OpenAI", "Gemini", "Mistral", "Groq"]
+    },
+    "functional_requirements": {
+        "ui": [
+            "Text input for prompt",
+            "Generate App button",
+            "Generate Game button",
+            "Run App button"
+        ],
+        "backend": [
+            "Send prompt to n8n",
+            "Receive generated code",
+            "Store code in file",
+            "Execute code",
+            "Display output"
+        ]
+    },
+    "workflow": [
+        "User enters prompt",
+        "Streamlit sends HTTP POST request",
+        "n8n webhook receives request",
+        "LLM generates code",
+        "Response returned to Streamlit",
+        "Code saved as generated_app.py",
+        "User runs the generated app"
+    ],
+    "n8n_workflow": [
+        "Webhook Trigger",
+        "LLM Node Processing",
+        "Return JSON response with code"
+    ],
+    "input_examples": [
+        "Create a calculator",
+        "Build a small game",
+        "Make a task manager app"
+    ],
+    "output": {
+        "type": "Generated Streamlit Python App",
+        "execution": "Runnable within Streamlit"
+    },
+    "deliverables": [
+        "Streamlit app code",
+        "n8n workflow JSON",
+        "LLM prompt templates",
+        "Documentation"
+    ],
+    "bonus": [
+        "Support multiple frameworks (Tkinter, Pygame)",
+        "Code editing before execution",
+        "Deploy online",
+        "Add templates library"
+    ],
+    "evaluation_criteria": [
+        "Functionality",
+        "Code quality",
+        "UI/UX",
+        "Automation flow",
+        "Innovation"
+    ]
+}
